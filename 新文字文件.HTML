@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elvara AI Studios | Intelligence with Purpose</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Fonts: Inter (UI) and Space Grotesk (Headings) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9', 
+                            600: '#0284c7',
+                            900: '#0c4a6e',
+                        },
+                        accent: {
+                            500: '#8b5cf6', 
+                        }
+                    },
+                    backgroundImage: {
+                        'hero-pattern': "radial-gradient(circle at center, rgba(14, 165, 233, 0.15) 0%, rgba(0, 0, 0, 0) 70%)",
+                        'hero-pattern-light': "radial-gradient(circle at center, rgba(14, 165, 233, 0.08) 0%, rgba(255, 255, 255, 0) 70%)",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        .dark .glass-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        .text-gradient {
+            background: linear-gradient(to right, #0ea5e9, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-300 font-sans antialiased overflow-x-hidden">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 top-0 start-0 border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md transition-all duration-300">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between px-6 py-4">
+            <a href="#" class="flex items-center gap-2 group">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-500 to-accent-500 flex items-center justify-center text-white font-bold text-lg shadow-lg group-hover:shadow-brand-500/50 transition-all">E</div>
+                <span class="self-center text-xl font-display font-bold whitespace-nowrap tracking-tight">Elvara AI</span>
+            </a>
+            
+            <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse items-center gap-4">
+                <!-- Language Switcher -->
+                <div class="relative group">
+                    <button id="lang-btn" class="flex items-center gap-1 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-brand-600 dark:hover:text-brand-400 transition-colors px-2 py-1 rounded cursor-pointer z-50 relative">
+                        <i class="fa-solid fa-globe"></i>
+                        <span id="current-lang">EN</span>
+                        <i class="fa-solid fa-chevron-down text-xs"></i>
+                    </button>
+                    <!-- Dropdown -->
+                    <div id="lang-dropdown" class="hidden absolute right-0 mt-2 w-32 bg-white dark:bg-slate-800 rounded-lg shadow-xl border border-slate-100 dark:border-slate-700 py-1 z-[60]">
+                        <button onclick="setLanguage('en')" class="block w-full text-left px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer">English</button>
+                        <button onclick="setLanguage('zh')" class="block w-full text-left px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer">中文</button>
+                        <button onclick="setLanguage('es')" class="block w-full text-left px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer">Español</button>
+                        <button onclick="setLanguage('ja')" class="block w-full text-left px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer">日本語</button>
+                    </div>
+                </div>
+
+                <!-- Theme Toggle -->
+                <button id="theme-toggle" class="text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none focus:ring-4 focus:ring-slate-200 dark:focus:ring-slate-700 rounded-lg text-sm p-2.5 transition-colors cursor-pointer">
+                    <i id="theme-icon" class="fas fa-moon"></i>
+                </button>
+                
+                <!-- REMOVED: Join Waitlist Button from Nav -->
+                
+                <button data-collapse-toggle="navbar-sticky" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-slate-500 rounded-lg md:hidden hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-slate-200 dark:text-slate-400 dark:hover:bg-slate-800 dark:focus:ring-slate-600 cursor-pointer" aria-controls="navbar-sticky" aria-expanded="false" id="mobile-menu-btn">
+                    <span class="sr-only">Open main menu</span>
+                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
+                <ul class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-slate-100 rounded-lg bg-slate-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-transparent dark:bg-slate-800 md:dark:bg-transparent dark:border-slate-700">
+                    <li><a href="#about" class="block py-2 px-3 text-slate-900 rounded hover:bg-slate-100 md:hover:bg-transparent md:hover:text-brand-600 md:p-0 dark:text-white md:dark:hover:text-brand-500 dark:hover:bg-slate-700 dark:hover:text-white md:dark:hover:bg-transparent transition-colors" data-i18n="nav_about">About</a></li>
+                    <li><a href="#features" class="block py-2 px-3 text-slate-900 rounded hover:bg-slate-100 md:hover:bg-transparent md:hover:text-brand-600 md:p-0 dark:text-white md:dark:hover:text-brand-500 dark:hover:bg-slate-700 dark:hover:text-white md:dark:hover:bg-transparent transition-colors" data-i18n="nav_features">Features</a></li>
+                    <li><a href="#roadmap" class="block py-2 px-3 text-slate-900 rounded hover:bg-slate-100 md:hover:bg-transparent md:hover:text-brand-600 md:p-0 dark:text-white md:dark:hover:text-brand-500 dark:hover:bg-slate-700 dark:hover:text-white md:dark:hover:bg-transparent transition-colors" data-i18n="nav_roadmap">Roadmap</a></li>
+                    <li><a href="#community" class="block py-2 px-3 text-slate-900 rounded hover:bg-slate-100 md:hover:bg-transparent md:hover:text-brand-600 md:p-0 dark:text-white md:dark:hover:text-brand-500 dark:hover:bg-slate-700 dark:hover:text-white md:dark:hover:bg-transparent transition-colors" data-i18n="nav_community">Community</a></li>
+                </ul>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 absolute w-full left-0 top-full z-40">
+             <ul class="flex flex-col p-4 font-medium">
+                <li><a href="#about" class="block py-2 px-3 text-slate-900 rounded hover:bg-slate-100 dark:text-white dark:hover:bg-slate-700" data-i18n="nav_about">About</a></li>
+                <li><a href="#features" class="block py-2 px-3 text-slate-900 rounded hover:bg-slate-100 dark:text-white dark:hover:bg-slate-700" data-i18n="nav_features">Features</a></li>
+                <li><a href="#roadmap" class="block py-2 px-3 text-slate-900 rounded hover:bg-slate-100 dark:text-white dark:hover:bg-slate-700" data-i18n="nav_roadmap">Roadmap</a></li>
+                <li><a href="#community" class="block py-2 px-3 text-slate-900 rounded hover:bg-slate-100 dark:text-white dark:hover:bg-slate-700" data-i18n="nav_community">Community</a></li>
+                <!-- REMOVED: Join Waitlist from Mobile Menu -->
+             </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+        <div class="absolute inset-0 bg-hero-pattern-light dark:bg-hero-pattern pointer-events-none"></div>
+        
+        <div class="max-w-7xl mx-auto px-6 relative z-10 text-center">
+            <div data-aos="fade-up" data-aos-duration="1000">
+                <span class="inline-block py-1 px-3 rounded-full bg-brand-100 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 text-xs font-semibold tracking-wide uppercase mb-6 border border-brand-200 dark:border-brand-800" data-i18n="hero_badge">
+                    Early Access Alpha
+                </span>
+                <h1 class="text-5xl md:text-7xl font-display font-bold tracking-tight mb-6 text-slate-900 dark:text-white">
+                    <span data-i18n="hero_title_1">AI that understands</span> <br class="hidden md:block" />
+                    <span class="text-gradient" data-i18n="hero_title_2">more.</span>
+                </h1>
+                <p class="text-lg md:text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto mb-10 leading-relaxed" data-i18n="hero_desc">
+                    Elvara is designed to understand context, reason about what matters, and help you act with purpose. No credit cards required. Just intelligence.
+                </p>
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <!-- REMOVED: Try Elvara Button -->
+                    
+                    <!-- Only Explore Button Remains -->
+                    <a href="#about" class="w-full sm:w-auto px-8 py-4 text-base font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-full hover:bg-slate-50 dark:hover:bg-slate-700 transition-all shadow-sm hover:shadow-md" data-i18n="btn_explore">
+                        Explore Elvara
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Abstract Visual -->
+            <div class="mt-20 relative max-w-4xl mx-auto" data-aos="fade-up" data-aos-delay="200">
+                <div class="glass-card rounded-2xl p-2 shadow-2xl border border-slate-200 dark:border-slate-800">
+                    <div class="bg-slate-100 dark:bg-slate-900 rounded-xl overflow-hidden aspect-[16/9] relative flex items-center justify-center">
+                        <div class="absolute inset-0 grid grid-cols-12 gap-4 p-8 opacity-50">
+                            <div class="col-span-3 h-full bg-slate-200 dark:bg-slate-800 rounded-lg animate-pulse"></div>
+                            <div class="col-span-9 flex flex-col gap-4">
+                                <div class="h-8 w-3/4 bg-slate-200 dark:bg-slate-800 rounded"></div>
+                                <div class="h-4 w-full bg-slate-200 dark:bg-slate-800 rounded"></div>
+                                <div class="h-4 w-5/6 bg-slate-200 dark:bg-slate-800 rounded"></div>
+                                <div class="mt-auto h-12 w-full bg-brand-500/20 border border-brand-500/30 rounded-lg flex items-center px-4">
+                                    <div class="h-2 w-2 bg-brand-500 rounded-full animate-ping mr-2"></div>
+                                    <div class="h-2 w-20 bg-brand-500/50 rounded"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="z-10 text-center">
+                            <i class="fa-solid fa-cube text-6xl text-brand-500/20 mb-4"></i>
+                            <p class="text-sm font-mono text-slate-400">Context Engine v0.1.0 [Initializing...]</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-24 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <h2 class="text-3xl md:text-4xl font-display font-bold mb-8 text-slate-900 dark:text-white" data-aos="fade-up" data-i18n="about_title">Why we are building Elvara</h2>
+            <div class="prose prose-lg prose-slate dark:prose-invert mx-auto text-slate-600 dark:text-slate-300" data-aos="fade-up" data-aos-delay="100">
+                <p data-i18n="about_p1">
+                    We believe AI should be a tool for thought, not just a generator of text. Current models often hallucinate context or lose the thread of complex reasoning. 
+                </p>
+                <p data-i18n="about_p2">
+                    <strong>Elvara AI Studios</strong> was founded on a simple premise: Build technology that respects the user's intent. We are a small, independent team focused on creating an assistant that actually <em>remembers</em> and <em>reasons</em>.
+                </p>
+                <p data-i18n="about_p3">
+                    We are currently in the early stages of development. No hype, just code.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Grid -->
+    <section id="features" class="py-24 bg-slate-50 dark:bg-slate-950">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-display font-bold mb-4 text-slate-900 dark:text-white" data-aos="fade-up" data-i18n="feat_title">Capabilities</h2>
+                <p class="text-slate-600 dark:text-slate-400" data-aos="fade-up" data-i18n="feat_subtitle">Designed for depth, built for utility.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="glass-card p-8 rounded-2xl hover:border-brand-500/50 transition-colors group" data-aos="fade-up" data-aos-delay="0">
+                    <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center text-blue-600 dark:text-blue-400 mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-brain text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-slate-900 dark:text-white" data-i18n="f1_title">Context-Aware</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed" data-i18n="f1_desc">
+                        Elvara maintains long-term memory of your projects and preferences, reducing the need to repeat yourself.
+                    </p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="glass-card p-8 rounded-2xl hover:border-brand-500/50 transition-colors group" data-aos="fade-up" data-aos-delay="100">
+                    <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center text-purple-600 dark:text-purple-400 mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-code text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-slate-900 dark:text-white" data-i18n="f2_title">Coding Assistance</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed" data-i18n="f2_desc">
+                        Understands entire repositories, not just single files. Debug, refactor, and architect with an AI that sees the big picture.
+                    </p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="glass-card p-8 rounded-2xl hover:border-brand-500/50 transition-colors group" data-aos="fade-up" data-aos-delay="200">
+                    <div class="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center text-green-600 dark:text-green-400 mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-magnifying-glass-chart text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-slate-900 dark:text-white" data-i18n="f3_title">Research & Reasoning</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed" data-i18n="f3_desc">
+                        Break down complex problems into actionable steps. Synthesize information from multiple sources reliably.
+                    </p>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="glass-card p-8 rounded-2xl hover:border-brand-500/50 transition-colors group relative overflow-hidden" data-aos="fade-up" data-aos-delay="300">
+                    <div class="absolute top-4 right-4">
+                        <span class="px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-orange-600 bg-orange-100 dark:bg-orange-900/30 dark:text-orange-400 rounded" data-i18n="tag_exp">Experimental</span>
+                    </div>
+                    <div class="w-12 h-12 bg-orange-100 dark:bg-orange-900/30 rounded-lg flex items-center justify-center text-orange-600 dark:text-orange-400 mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-robot text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-slate-900 dark:text-white" data-i18n="f4_title">Autonomous Agents</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed" data-i18n="f4_desc">
+                        Deploy agents to handle background tasks, file organization, and scheduling. Currently in internal testing.
+                    </p>
+                </div>
+
+                <!-- Feature 5 -->
+                <div class="glass-card p-8 rounded-2xl hover:border-brand-500/50 transition-colors group" data-aos="fade-up" data-aos-delay="400">
+                    <div class="w-12 h-12 bg-pink-100 dark:bg-pink-900/30 rounded-lg flex items-center justify-center text-pink-600 dark:text-pink-400 mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-file-contract text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-slate-900 dark:text-white" data-i18n="f5_title">Long-form Tasks</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed" data-i18n="f5_desc">
+                        Generate comprehensive reports, documentation, and creative writing with consistent tone and structure.
+                    </p>
+                </div>
+
+                <!-- Feature 6 -->
+                <div class="glass-card p-8 rounded-2xl hover:border-brand-500/50 transition-colors group relative overflow-hidden opacity-80" data-aos="fade-up" data-aos-delay="500">
+                    <div class="absolute top-4 right-4">
+                        <span class="px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-500 bg-slate-100 dark:bg-slate-800 dark:text-slate-400 rounded" data-i18n="tag_soon">Coming Soon</span>
+                    </div>
+                    <div class="w-12 h-12 bg-slate-100 dark:bg-slate-800 rounded-lg flex items-center justify-center text-slate-500 dark:text-slate-400 mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-plug text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-slate-900 dark:text-white" data-i18n="f6_title">Developer API</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed" data-i18n="f6_desc">
+                        Integrate Elvara's reasoning engine directly into your own applications. Documentation in progress.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Free Experience Philosophy -->
+    <section class="py-24 bg-brand-900 text-white relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-64 h-64 bg-brand-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+        <div class="absolute bottom-0 right-0 w-64 h-64 bg-accent-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+
+        <div class="max-w-5xl mx-auto px-6 relative z-10 flex flex-col md:flex-row items-center gap-12">
+            <div class="md:w-1/2" data-aos="fade-right">
+                <h2 class="text-3xl md:text-4xl font-display font-bold mb-6" data-i18n="free_title">Intelligence should be accessible.</h2>
+                <p class="text-brand-100 text-lg mb-6 leading-relaxed" data-i18n="free_desc">
+                    We are building Elvara with a "Free First" philosophy. We believe you should be able to experience the full power of our core models without entering a credit card.
+                </p>
+                <ul class="space-y-4">
+                    <li class="flex items-center gap-3">
+                        <i class="fa-solid fa-check text-green-400"></i>
+                        <span data-i18n="free_li1">No credit card required for signup</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <i class="fa-solid fa-check text-green-400"></i>
+                        <span data-i18n="free_li2">Transparent usage limits</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <i class="fa-solid fa-check text-green-400"></i>
+                        <span data-i18n="free_li3">Privacy-respecting architecture</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="md:w-1/2 w-full" data-aos="fade-left">
+                <div class="bg-white/10 backdrop-blur-md border border-white/20 p-8 rounded-2xl shadow-2xl">
+                    <div class="flex items-center justify-between mb-6 border-b border-white/10 pb-4">
+                        <span class="font-bold text-xl" data-i18n="plan_name">Standard Plan</span>
+                        <span class="text-3xl font-display font-bold">$0</span>
+                    </div>
+                    <p class="text-sm text-brand-200 mb-6" data-i18n="plan_desc">Perfect for individuals exploring AI capabilities.</p>
+                    
+                    <!-- REMOVED: Get Started Free Button -->
+                    <div class="text-center py-3 border border-dashed border-white/30 rounded-lg text-brand-100 text-sm italic">
+                        Public access coming soon
+                    </div>
+
+                    <p class="text-xs text-center mt-4 text-brand-200/70" data-i18n="plan_note">
+                        *Pro tiers will be introduced later to support compute costs.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Roadmap -->
+    <section id="roadmap" class="py-24 bg-white dark:bg-slate-900">
+        <div class="max-w-4xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-display font-bold mb-4 text-slate-900 dark:text-white" data-aos="fade-up" data-i18n="road_title">Development Roadmap</h2>
+                <p class="text-slate-600 dark:text-slate-400" data-aos="fade-up" data-i18n="road_sub">Building in public. Here is where we are.</p>
+            </div>
+
+            <div class="relative border-l-2 border-slate-200 dark:border-slate-700 ml-4 md:ml-auto md:mr-auto md:w-2/3 pl-8 md:pl-0 space-y-12">
+                
+                <!-- Item 1 -->
+                <div class="relative md:pl-12" data-aos="fade-up">
+                    <div class="absolute -left-[9px] md:-left-[41px] top-1 w-5 h-5 rounded-full bg-green-500 border-4 border-white dark:border-slate-900"></div>
+                    <div class="mb-1 text-sm font-semibold text-green-600 dark:text-green-400 uppercase tracking-wide" data-i18n="status_done">Completed</div>
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2" data-i18n="r1_title">Core Prototype</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm" data-i18n="r1_desc">Initial model fine-tuning and basic chat interface established.</p>
+                </div>
+
+                <!-- Item 2 -->
+                <div class="relative md:pl-12" data-aos="fade-up">
+                    <div class="absolute -left-[9px] md:-left-[41px] top-1 w-5 h-5 rounded-full bg-brand-500 border-4 border-white dark:border-slate-900 ring-4 ring-brand-500/20"></div>
+                    <div class="mb-1 text-sm font-semibold text-brand-600 dark:text-brand-400 uppercase tracking-wide" data-i18n="status_prog">In Progress</div>
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2" data-i18n="r2_title">Early Testing & Feedback</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm" data-i18n="r2_desc">Closed alpha with select users. Refining context window handling and reasoning logic.</p>
+                </div>
+
+                <!-- Item 3 -->
+                <div class="relative md:pl-12" data-aos="fade-up">
+                    <div class="absolute -left-[9px] md:-left-[41px] top-1 w-5 h-5 rounded-full bg-slate-300 dark:bg-slate-700 border-4 border-white dark:border-slate-900"></div>
+                    <div class="mb-1 text-sm font-semibold text-slate-500 dark:text-slate-500 uppercase tracking-wide" data-i18n="status_q4">Q4 2026 Target</div>
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2" data-i18n="r3_title">Public Beta Release</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm" data-i18n="r3_desc">Opening access to the general public. Launch of free tier infrastructure.</p>
+                </div>
+
+                <!-- Item 4 -->
+                <div class="relative md:pl-12" data-aos="fade-up">
+                    <div class="absolute -left-[9px] md:-left-[41px] top-1 w-5 h-5 rounded-full bg-slate-300 dark:bg-slate-700 border-4 border-white dark:border-slate-900"></div>
+                    <div class="mb-1 text-sm font-semibold text-slate-500 dark:text-slate-500 uppercase tracking-wide" data-i18n="status_future">Future</div>
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2" data-i18n="r4_title">Advanced Capabilities & API</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm" data-i18n="r4_desc">Rollout of autonomous agents, developer API, and enterprise-grade security features.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Community & Careers -->
+    <section id="community" class="py-24 bg-slate-50 dark:bg-slate-950">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12">
+            
+            <!-- Community -->
+            <div class="glass-card p-10 rounded-3xl" data-aos="fade-right">
+                <h2 class="text-2xl font-display font-bold mb-6 text-slate-900 dark:text-white" data-i18n="comm_title">Join the Community</h2>
+                <p class="text-slate-600 dark:text-slate-400 mb-8" data-i18n="comm_desc">
+                    Elvara is being built in the open. Connect with other developers, share feedback, and help shape the future of the product.
+                </p>
+                <div class="flex flex-wrap gap-4">
+                    <a href="https://discord.gg/veZqUHaWQ" target="_blank" class="flex items-center gap-2 px-6 py-3 bg-[#5865F2] text-white rounded-lg hover:bg-[#4752C4] transition-colors font-medium">
+                        <i class="fa-brands fa-discord"></i> Discord
+                    </a>
+                    <a href="https://t.me/Elvara_ai_chag" target="_blank" class="flex items-center gap-2 px-6 py-3 bg-[#229ED9] text-white rounded-lg hover:bg-[#1b8ec5] transition-colors font-medium">
+                        <i class="fa-brands fa-telegram"></i> Telegram
+                    </a>
+                    <a href="https://github.com/Electric-light-hub/Elvara-AI" target="_blank" class="flex items-center gap-2 px-6 py-3 bg-slate-900 dark:bg-white dark:text-slate-900 text-white rounded-lg hover:bg-slate-800 dark:hover:bg-slate-100 transition-colors font-medium">
+                        <i class="fa-brands fa-github"></i> GitHub
+                    </a>
+                    <a href="https://www.youtube.com/@Elvara-Studios" target="_blank" class="flex items-center gap-2 px-6 py-3 bg-[#FF0000] text-white rounded-lg hover:bg-[#cc0000] transition-colors font-medium">
+                        <i class="fa-brands fa-youtube"></i> YouTube
+                    </a>
+                </div>
+            </div>
+
+            <!-- Careers -->
+            <div id="join" class="glass-card p-10 rounded-3xl border-l-4 border-l-brand-500" data-aos="fade-left">
+                <h2 class="text-2xl font-display font-bold mb-6 text-slate-900 dark:text-white" data-i18n="career_title">Build with us</h2>
+                <p class="text-slate-600 dark:text-slate-400 mb-6" data-i18n="career_desc">
+                    We are looking for passionate engineers, researchers, and designers who want to define the next generation of AI interaction.
+                </p>
+                <div class="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg mb-6 border border-yellow-200 dark:border-yellow-800">
+                    <p class="text-xs text-yellow-800 dark:text-yellow-200" data-i18n="career_note">
+                        <i class="fa-solid fa-circle-info mr-1"></i> Note: We are an early-stage startup. Roles may involve equity-based compensation or flexible arrangements depending on funding status.
+                    </p>
+                </div>
+                <a href="mailto:careers@elvara.ai" class="inline-flex items-center text-brand-600 dark:text-brand-400 font-semibold hover:underline" data-i18n="career_link">
+                    View Open Roles <i class="fa-solid fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
+                <div class="col-span-2 md:col-span-1">
+                    <a href="#" class="flex items-center gap-2 mb-4">
+                        <div class="w-6 h-6 rounded bg-gradient-to-br from-brand-500 to-accent-500 flex items-center justify-center text-white text-xs font-bold">E</div>
+                        <span class="font-display font-bold text-lg text-slate-900 dark:text-white">Elvara AI</span>
+                    </a>
+                    <p class="text-sm text-slate-500 dark:text-slate-400" data-i18n="footer_tagline">
+                        Intelligence with purpose.<br>Built for everyone.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-slate-900 dark:text-white mb-4" data-i18n="ft_product">Product</h4>
+                    <ul class="space-y-2 text-sm text-slate-600 dark:text-slate-400">
+                        <li><a href="#" class="hover:text-brand-600 dark:hover:text-brand-400" data-i18n="nav_features">Features</a></li>
+                        <li><a href="#" class="hover:text-brand-600 dark:hover:text-brand-400" data-i18n="nav_roadmap">Roadmap</a></li>
+                        <li><a href="#" class="hover:text-brand-600 dark:hover:text-brand-400" data-i18n="ft_pricing">Pricing</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-slate-900 dark:text-white mb-4" data-i18n="ft_company">Company</h4>
+                    <ul class="space-y-2 text-sm text-slate-600 dark:text-slate-400">
+                        <li><a href="#" class="hover:text-brand-600 dark:hover:text-brand-400" data-i18n="nav_about">About</a></li>
+                        <li><a href="#" class="hover:text-brand-600 dark:hover:text-brand-400" data-i18n="ft_careers">Careers</a></li>
+                        <li><a href="#" class="hover:text-brand-600 dark:hover:text-brand-400" data-i18n="ft_blog">Blog</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-slate-900 dark:text-white mb-4" data-i18n="ft_legal">Legal</h4>
+                    <ul class="space-y-2 text-sm text-slate-600 dark:text-slate-400">
+                        <li><a href="#" class="hover:text-brand-600 dark:hover:text-brand-400" data-i18n="ft_privacy">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-brand-600 dark:hover:text-brand-400" data-i18n="ft_terms">Terms of Service</a></li>
+                        <li><a href="#" class="hover:text-brand-600 dark:hover:text-brand-400" data-i18n="ft_contact">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-slate-100 dark:border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-xs text-slate-500">© 2026 Elvara AI Studios. All rights reserved.</p>
+                <div class="flex space-x-4">
+                    <a href="https://discord.gg/veZqUHaWQ" target="_blank" class="text-slate-400 hover:text-[#5865F2] transition-colors"><i class="fa-brands fa-discord"></i></a>
+                    <a href="https://t.me/Elvara_ai_chag" target="_blank" class="text-slate-400 hover:text-[#229ED9] transition-colors"><i class="fa-brands fa-telegram"></i></a>
+                    <a href="https://github.com/Electric-light-hub/Elvara-AI" target="_blank" class="text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"><i class="fa-brands fa-github"></i></a>
+                    <a href="https://www.youtube.com/@Elvara-Studios" target="_blank" class="text-slate-400 hover:text-[#FF0000] transition-colors"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // --- Translations Dictionary ---
+        const translations = {
+            en: {
+                nav_about: "About",
+                nav_features: "Features",
+                nav_roadmap: "Roadmap",
+                nav_community: "Community",
+                hero_badge: "Early Access Alpha",
+                hero_title_1: "AI that understands",
+                hero_title_2: "more.",
+                hero_desc: "Elvara is designed to understand context, reason about what matters, and help you act with purpose. No credit cards required. Just intelligence.",
+                btn_explore: "Explore Elvara",
+                about_title: "Why we are building Elvara",
+                about_p1: "We believe AI should be a tool for thought, not just a generator of text. Current models often hallucinate context or lose the thread of complex reasoning.",
+                about_p2: "<strong>Elvara AI Studios</strong> was founded on a simple premise: Build technology that respects the user's intent. We are a small, independent team focused on creating an assistant that actually <em>remembers</em> and <em>reasons</em>.",
+                about_p3: "We are currently in the early stages of development. No hype, just code.",
+                feat_title: "Capabilities",
+                feat_subtitle: "Designed for depth, built for utility.",
+                f1_title: "Context-Aware",
+                f1_desc: "Elvara maintains long-term memory of your projects and preferences, reducing the need to repeat yourself.",
+                f2_title: "Coding Assistance",
+                f2_desc: "Understands entire repositories, not just single files. Debug, refactor, and architect with an AI that sees the big picture.",
+                f3_title: "Research & Reasoning",
+                f3_desc: "Break down complex problems into actionable steps. Synthesize information from multiple sources reliably.",
+                tag_exp: "Experimental",
+                f4_title: "Autonomous Agents",
+                f4_desc: "Deploy agents to handle background tasks, file organization, and scheduling. Currently in internal testing.",
+                f5_title: "Long-form Tasks",
+                f5_desc: "Generate comprehensive reports, documentation, and creative writing with consistent tone and structure.",
+                tag_soon: "Coming Soon",
+                f6_title: "Developer API",
+                f6_desc: "Integrate Elvara's reasoning engine directly into your own applications. Documentation in progress.",
+                free_title: "Intelligence should be accessible.",
+                free_desc: "We are building Elvara with a \"Free First\" philosophy. We believe you should be able to experience the full power of our core models without entering a credit card.",
+                free_li1: "No credit card required for signup",
+                free_li2: "Transparent usage limits",
+                free_li3: "Privacy-respecting architecture",
+                plan_name: "Standard Plan",
+                plan_desc: "Perfect for individuals exploring AI capabilities.",
+                plan_note: "*Pro tiers will be introduced later to support compute costs.",
+                road_title: "Development Roadmap",
+                road_sub: "Building in public. Here is where we are.",
+                status_done: "Completed",
+                r1_title: "Core Prototype",
+                r1_desc: "Initial model fine-tuning and basic chat interface established.",
+                status_prog: "In Progress",
+                r2_title: "Early Testing & Feedback",
+                r2_desc: "Closed alpha with select users. Refining context window handling and reasoning logic.",
+                status_q4: "Q4 2026 Target",
+                r3_title: "Public Beta Release",
+                r3_desc: "Opening access to the general public. Launch of free tier infrastructure.",
+                status_future: "Future",
+                r4_title: "Advanced Capabilities & API",
+                r4_desc: "Rollout of autonomous agents, developer API, and enterprise-grade security features.",
+                comm_title: "Join the Community",
+                comm_desc: "Elvara is being built in the open. Connect with other developers, share feedback, and help shape the future of the product.",
+                career_title: "Build with us",
+                career_desc: "We are looking for passionate engineers, researchers, and designers who want to define the next generation of AI interaction.",
+                career_note: "<i class='fa-solid fa-circle-info mr-1'></i> Note: We are an early-stage startup. Roles may involve equity-based compensation or flexible arrangements depending on funding status.",
+                career_link: "View Open Roles <i class='fa-solid fa-arrow-right ml-2'></i>",
+                footer_tagline: "Intelligence with purpose.<br>Built for everyone.",
+                ft_product: "Product",
+                ft_pricing: "Pricing",
+                ft_company: "Company",
+                ft_careers: "Careers",
+                ft_blog: "Blog",
+                ft_legal: "Legal",
+                ft_privacy: "Privacy Policy",
+                ft_terms: "Terms of Service",
+                ft_contact: "Contact"
+            },
+            zh: {
+                nav_about: "关于我们",
+                nav_features: "功能特性",
+                nav_roadmap: "发展路线",
+                nav_community: "社区",
+                hero_badge: "早期测试版",
+                hero_title_1: "更懂你的",
+                hero_title_2: "人工智能。",
+                hero_desc: "Elvara 旨在理解上下文，推理关键事项，并帮助您有目的地行动。无需信用卡，即刻体验智能。",
+                btn_explore: "探索 Elvara",
+                about_title: "为什么我们要构建 Elvara",
+                about_p1: "我们相信 AI 应该是思考的工具，而不仅仅是文本生成器。目前的模型经常产生幻觉或丢失复杂推理的线索。",
+                about_p2: "<strong>Elvara AI Studios</strong> 建立在一个简单的前提之上：构建尊重用户意图的技术。我们是一个小型独立团队，专注于创建一个真正能<em>记忆</em>和<em>推理</em>的助手。",
+                about_p3: "我们目前处于开发的早期阶段。没有炒作，只有代码。",
+                feat_title: "核心能力",
+                feat_subtitle: "为深度设计，为实用构建。",
+                f1_title: "上下文感知",
+                f1_desc: "Elvara 保持对您项目和偏好的长期记忆，减少重复输入的需要。",
+                f2_title: "编程辅助",
+                f2_desc: "理解整个代码库，而不仅仅是单个文件。使用能看到全局的 AI 进行调试、重构和架构设计。",
+                f3_title: "研究与推理",
+                f3_desc: "将复杂问题分解为可执行的步骤。可靠地综合来自多个来源的信息。",
+                tag_exp: "实验性",
+                f4_title: "自主代理",
+                f4_desc: "部署代理来处理后台任务、文件组织和日程安排。目前正在内部测试中。",
+                f5_title: "长文本任务",
+                f5_desc: "生成具有统一语气和结构的综合报告、文档和创意写作。",
+                tag_soon: "即将推出",
+                f6_title: "开发者 API",
+                f6_desc: "将 Elvara 的推理引擎直接集成到您自己的应用程序中。文档正在编写中。",
+                free_title: "智能应当触手可及。",
+                free_desc: "我们以“免费优先”的理念构建 Elvara。我们相信您应该能够在无需输入信用卡的情况下体验核心模型的全部功能。",
+                free_li1: "注册无需信用卡",
+                free_li2: "透明的使用限制",
+                free_li3: "尊重隐私的架构",
+                plan_name: "标准版",
+                plan_desc: "非常适合探索 AI 能力的个人用户。",
+                plan_note: "*稍后将推出 Pro 层级以支持计算成本。",
+                road_title: "开发路线图",
+                road_sub: "公开构建。这是我们的当前进度。",
+                status_done: "已完成",
+                r1_title: "核心原型",
+                r1_desc: "初步模型微调和基本聊天界面已建立。",
+                status_prog: "进行中",
+                r2_title: "早期测试与反馈",
+                r2_desc: "针对特定用户的封闭测试。优化上下文窗口处理和推理逻辑。",
+                status_q4: "2026年第四季度目标",
+                r3_title: "公测发布",
+                r3_desc: "向公众开放访问。启动免费版基础设施。",
+                status_future: "未来",
+                r4_title: "高级功能与 API",
+                r4_desc: "推出自主代理、开发者 API 和企业级安全功能。",
+                comm_title: "加入社区",
+                comm_desc: "Elvara 正在公开构建中。与其他开发者联系，分享反馈，并帮助塑造产品的未来。",
+                career_title: "与我们共建",
+                career_desc: "我们正在寻找充满热情的工程师、研究人员和设计师，共同定义下一代 AI 交互。",
+                career_note: "<i class='fa-solid fa-circle-info mr-1'></i> 注意：我们是一家早期初创公司。职位可能涉及基于股权的薪酬或灵活安排，具体取决于融资状况。",
+                career_link: "查看招聘职位 <i class='fa-solid fa-arrow-right ml-2'></i>",
+                footer_tagline: "有目的的智能。<br>为每个人构建。",
+                ft_product: "产品",
+                ft_pricing: "价格",
+                ft_company: "公司",
+                ft_careers: "招聘",
+                ft_blog: "博客",
+                ft_legal: "法律",
+                ft_privacy: "隐私政策",
+                ft_terms: "服务条款",
+                ft_contact: "联系方式"
+            },
+            es: {
+                nav_about: "Nosotros",
+                nav_features: "Características",
+                nav_roadmap: "Hoja de ruta",
+                nav_community: "Comunidad",
+                hero_badge: "Alpha de Acceso Anticipado",
+                hero_title_1: "IA que entiende",
+                hero_title_2: "más.",
+                hero_desc: "Elvara está diseñada para entender el contexto, razonar sobre lo importante y ayudarte a actuar con propósito. Sin tarjetas de crédito. Solo inteligencia.",
+                btn_explore: "Explorar Elvara",
+                about_title: "Por qué construimos Elvara",
+                about_p1: "Creemos que la IA debe ser una herramienta para el pensamiento, no solo un generador de texto. Los modelos actuales a menudo alucinan contexto o pierden el hilo.",
+                about_p2: "<strong>Elvara AI Studios</strong> se fundó con una premisa simple: Construir tecnología que respete la intención del usuario. Somos un equipo pequeño e independiente enfocado en crear un asistente que realmente <em>recuerde</em> y <em>razones</em>.",
+                about_p3: "Actualmente estamos en las primeras etapas de desarrollo. Sin exageraciones, solo código.",
+                feat_title: "Capacidades",
+                feat_subtitle: "Diseñado para la profundidad, construido para la utilidad.",
+                f1_title: "Consciente del Contexto",
+                f1_desc: "Elvara mantiene la memoria a largo plazo de tus proyectos y preferencias, reduciendo la necesidad de repetirse.",
+                f2_title: "Asistencia de Código",
+                f2_desc: "Entiende repositorios completos, no solo archivos individuales. Depura, refactoriza y arquitecta con una IA que ve el panorama general.",
+                f3_title: "Investigación y Razonamiento",
+                f3_desc: "Desglosa problemas complejos en pasos accionables. Sintetiza información de múltiples fuentes de manera confiable.",
+                tag_exp: "Experimental",
+                f4_title: "Agentes Autónomos",
+                f4_desc: "Despliega agentes para manejar tareas en segundo plano, organización de archivos y programación. Actualmente en pruebas internas.",
+                f5_title: "Tareas de Formato Largo",
+                f5_desc: "Genera informes completos, documentación y escritura creativa con un tono y estructura consistentes.",
+                tag_soon: "Próximamente",
+                f6_title: "API para Desarrolladores",
+                f6_desc: "Integra el motor de razonamiento de Elvara directamente en tus propias aplicaciones. Documentación en progreso.",
+                free_title: "La inteligencia debe ser accesible.",
+                free_desc: "Estamos construyendo Elvara con una filosofía de \"Gratis Primero\". Creemos que deberías poder experimentar toda la potencia de nuestros modelos sin ingresar una tarjeta de crédito.",
+                free_li1: "No se requiere tarjeta de crédito",
+                free_li2: "Límites de uso transparentes",
+                free_li3: "Arquitectura que respeta la privacidad",
+                plan_name: "Plan Estándar",
+                plan_desc: "Perfecto para individuos que exploran capacidades de IA.",
+                plan_note: "*Los niveles Pro se introducirán más adelante para soportar costos de computación.",
+                road_title: "Hoja de Ruta",
+                road_sub: "Construyendo en público. Aquí es donde estamos.",
+                status_done: "Completado",
+                r1_title: "Prototipo Central",
+                r1_desc: "Ajuste fino inicial del modelo e interfaz de chat básica establecida.",
+                status_prog: "En Progreso",
+                r2_title: "Pruebas Tempranas y Feedback",
+                r2_desc: "Alpha cerrada con usuarios seleccionados. Refinando el manejo de ventanas de contexto y lógica de razonamiento.",
+                status_q4: "Objetivo Q4 2026",
+                r3_title: "Lanzamiento Beta Público",
+                r3_desc: "Apertura de acceso al público general. Lanzamiento de infraestructura de nivel gratuito.",
+                status_future: "Futuro",
+                r4_title: "Capacidades Avanzadas y API",
+                r4_desc: "Despliegue de agentes autónomos, API para desarrolladores y funciones de seguridad empresarial.",
+                comm_title: "Únete a la Comunidad",
+                comm_desc: "Elvara se está construyendo abiertamente. Conéctate con otros desarrolladores, comparte comentarios y ayuda a dar forma al futuro del producto.",
+                career_title: "Construye con nosotros",
+                career_desc: "Buscamos ingenieros, investigadores y diseñadores apasionados que quieran definir la próxima generación de interacción con IA.",
+                career_note: "<i class='fa-solid fa-circle-info mr-1'></i> Nota: Somos una startup en etapa temprana. Los roles pueden implicar compensación basada en acciones o acuerdos flexibles.",
+                career_link: "Ver Roles Abiertos <i class='fa-solid fa-arrow-right ml-2'></i>",
+                footer_tagline: "Inteligencia con propósito.<br>Construida para todos.",
+                ft_product: "Producto",
+                ft_pricing: "Precios",
+                ft_company: "Empresa",
+                ft_careers: "Carreras",
+                ft_blog: "Blog",
+                ft_legal: "Legal",
+                ft_privacy: "Política de Privacidad",
+                ft_terms: "Términos de Servicio",
+                ft_contact: "Contacto"
+            },
+            ja: {
+                nav_about: "概要",
+                nav_features: "機能",
+                nav_roadmap: "ロードマップ",
+                nav_community: "コミュニティ",
+                hero_badge: "早期アクセスアルファ",
+                hero_title_1: "より深く理解する",
+                hero_title_2: "AI。",
+                hero_desc: "Elvaraは、文脈を理解し、重要なことを推論し、目的を持って行動できるよう設計されています。クレジットカードは不要です。",
+                btn_explore: "Elvaraを探る",
+                about_title: "Elvaraを構築する理由",
+                about_p1: "私たちは、AIは単なるテキスト生成機ではなく、思考のためのツールであるべきだと考えています。現在のモデルは、しばしば文脈を幻覚したり、複雑な推論のスレッドを見失ったりします。",
+                about_p2: "<strong>Elvara AI Studios</strong>は、ユーザーの意図を尊重する技術を構築するというシンプルな前提で設立されました。私たちは、実際に<em>記憶</em>し<em>推論</em>するアシスタントの作成に焦点を当てた小規模な独立チームです。",
+                about_p3: "現在、開発の初期段階にあります。誇大宣伝はなく、コードのみです。",
+                feat_title: "機能",
+                feat_subtitle: "深さのために設計され、実用性のために構築されました。",
+                f1_title: "コンテキスト認識",
+                f1_desc: "Elvaraはプロジェクトと設定の長期記憶を維持し、繰り返しの必要性を減らします。",
+                f2_title: "コーディング支援",
+                f2_desc: "単一のファイルだけでなく、リポジトリ全体を理解します。全体像を見るAIでデバッグ、リファクタリング、アーキテクチャ設計を行います。",
+                f3_title: "調査と推論",
+                f3_desc: "複雑な問題を実行可能なステップに分解します。複数のソースからの情報を確実に統合します。",
+                tag_exp: "実験的",
+                f4_title: "自律エージェント",
+                f4_desc: "バックグラウンドタスク、ファイル整理、スケジューリングを処理するエージェントを展開します。現在内部テスト中。",
+                f5_title: "長文タスク",
+                f5_desc: "一貫したトーンと構造で、包括的なレポート、ドキュメント、クリエイティブライティングを生成します。",
+                tag_soon: "近日公開",
+                f6_title: "開発者API",
+                f6_desc: "Elvaraの推論エンジンを独自のアプリケーションに直接統合します。ドキュメント作成中。",
+                free_title: "知能はアクセス可能であるべきです。",
+                free_desc: "私たちは「無料優先」の哲学でElvaraを構築しています。クレジットカードを入力せずにコアモデルの全機能を体験できるべきだと私たちは信じています。",
+                free_li1: "サインアップにクレジットカード不要",
+                free_li2: "透明な使用制限",
+                free_li3: "プライバシーを尊重するアーキテクチャ",
+                plan_name: "スタンダードプラン",
+                plan_desc: "AI機能を探求する個人に最適です。",
+                plan_note: "*計算コストをサポートするため、後でProティアが導入されます。",
+                road_title: "開発ロードマップ",
+                road_sub: "公開で構築中。現在の状況はこちらです。",
+                status_done: "完了",
+                r1_title: "コアプロトタイプ",
+                r1_desc: "初期モデルの微調整と基本的なチャットインターフェースが確立されました。",
+                status_prog: "進行中",
+                r2_title: "早期テストとフィードバック",
+                r2_desc: "厳選されたユーザーによるクローズドアルファ。コンテキストウィンドウ処理と推論ロジックの改良。",
+                status_q4: "2026年第4四半期目標",
+                r3_title: "パブリックベータリリース",
+                r3_desc: "一般公開へのアクセス開放。無料ティアインフラの立ち上げ。",
+                status_future: "将来",
+                r4_title: "高度な機能とAPI",
+                r4_desc: "自律エージェント、開発者API、エンタープライズグレードのセキュリティ機能の展開。",
+                comm_title: "コミュニティに参加",
+                comm_desc: "Elvaraはオープンに構築されています。他の開発者とつながり、フィードバックを共有し、製品の未来を形作る手助けをしてください。",
+                career_title: "私たちと一緒に構築しましょう",
+                career_desc: "次世代のAIインタラクションを定義したいという情熱的なエンジニア、研究者、デザイナーを募集しています。",
+                career_note: "<i class='fa-solid fa-circle-info mr-1'></i> 注：私たちはアーリーステージのスタートアップです。役割には、資金調達状況に応じて株式ベースの報酬や柔軟な取り決めが含まれる場合があります。",
+                career_link: "募集中の職位を見る <i class='fa-solid fa-arrow-right ml-2'></i>",
+                footer_tagline: "目的のある知能。<br>すべての人のために構築。",
+                ft_product: "製品",
+                ft_pricing: "価格",
+                ft_company: "会社",
+                ft_careers: "採用",
+                ft_blog: "ブログ",
+                ft_legal: "法的情報",
+                ft_privacy: "プライバシーポリシー",
+                ft_terms: "利用規約",
+                ft_contact: "お問い合わせ"
+            }
+        };
+
+        // --- Logic ---
+
+        // Initialize Animate On Scroll
+        AOS.init({
+            once: true,
+            offset: 50,
+            duration: 800,
+            easing: 'ease-out-cubic',
+        });
+
+        // Dark Mode Logic
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+            themeIcon.classList.remove('fa-moon');
+            themeIcon.classList.add('fa-sun');
+        } else {
+            document.documentElement.classList.remove('dark');
+            themeIcon.classList.remove('fa-sun');
+            themeIcon.classList.add('fa-moon');
+        }
+
+        themeToggleBtn.addEventListener('click', function() {
+            if (document.documentElement.classList.contains('dark')) {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('color-theme', 'light');
+            } else {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('color-theme', 'dark');
+            }
+        });
+
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Language Switcher Logic
+        const langBtn = document.getElementById('lang-btn');
+        const langDropdown = document.getElementById('lang-dropdown');
+        const currentLangSpan = document.getElementById('current-lang');
+
+        langBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            langDropdown.classList.toggle('hidden');
+        });
+
+        window.addEventListener('click', (e) => {
+            if (!langBtn.contains(e.target) && !langDropdown.contains(e.target)) {
+                if (!langDropdown.classList.contains('hidden')) {
+                    langDropdown.classList.add('hidden');
+                }
+            }
+        });
+
+        window.setLanguage = function(lang) {
+            if (!translations[lang]) return;
+            
+            const elements = document.querySelectorAll('[data-i18n]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    el.innerHTML = translations[lang][key];
+                }
+            });
+
+            currentLangSpan.textContent = lang.toUpperCase();
+            langDropdown.classList.add('hidden');
+            localStorage.setItem('preferred-lang', lang);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('preferred-lang');
+            if (savedLang && translations[savedLang]) {
+                setLanguage(savedLang);
+            }
+        });
+
+    </script>
+</body>
+</html>
